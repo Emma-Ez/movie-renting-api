@@ -53,3 +53,36 @@ class Customer {
         this.rentals.forEach(movie => console.log(movie.title));
     }
   }
+
+  // MovieStore class
+class MovieStore {
+    constructor(movies) {
+      this.movies = movies;
+      this.rentals = [];
+    }
+  
+    browseMovies() {
+        return this.movies.filter(movie => movie.getAvailability());
+      }
+    
+      rentMovie(customer, movieTitle) {
+        const movie = this.movies.find(movie => movie.title === movieTitle);
+        if (movie && movie.rent(customer)) {
+          this.rentals.push({ customer, movie });
+          return true;
+        } else {
+          return false;
+        }
+      }
+    
+      returnMovie(customer, movieTitle) {
+        const rental = this.rentals.find(rental => rental.movie.title === movieTitle && rental.customer === customer);
+        if (rental) {
+          rental.movie.returnMovie();
+          this.rentals.splice(this.rentals.indexOf(rental), 1);
+          return true;
+        } else {
+          return false;
+        }
+      }
+    }
